@@ -10,16 +10,17 @@ import {
 import { NavGroup } from "@/components/layout/nav-group";
 import { NavUser } from "@/components/layout/nav-user";
 import { TeamSwitcher } from "@/components/layout/team-switcher";
-import { sidebarData } from "./data/sidebar-data";
+import { getSidebarData } from "./data/sidebar-data";
 import { useSession } from "next-auth/react";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = useSession();
-  console.log("Session in sidebar:");
+  const sidebarData = getSidebarData({ email: session?.user.email || "", name: "", avatar: "" }, session?.user.businesses.map((business) => ({ name: '', plan: '', })) ?? [])
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={sidebarData.teams} />
+        {session?.user.businesses.length ? <TeamSwitcher businesses={sidebarData.businesses} /> : null}
+        
       </SidebarHeader>
       <SidebarContent>
         {sidebarData.navGroups.map((props) => (

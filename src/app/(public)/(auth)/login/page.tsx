@@ -152,7 +152,7 @@ export default function UserAuthForm({}: UserAuthFormProps) {
             variant="outline"
             type="button"
             disabled={isLoading}
-            onClick={() => router.push("/register")}
+            onClick={() => router.replace("/register")}
           >
             Register
           </Button>

@@ -129,6 +129,7 @@ export default function SignUpForm({}: React.HTMLAttributes<HTMLFormElement>) {
             className="w-full"
             type="button"
             disabled={isLoading}
+            onClick={()=>router.push('/login')}
           >
             Login
           </Button>

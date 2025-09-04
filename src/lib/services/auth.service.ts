@@ -42,6 +42,6 @@ export class AuthService {
     if (!valid) {
       throw new UnauthorizedError("Invalid credentials");
     }
-    return { id: user.id, email: user.email, roleId: user.roleId };
+    return user;
   }
 }

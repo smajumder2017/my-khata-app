@@ -1,22 +1,27 @@
-// middleware.ts
 import { NextRequest, NextResponse } from "next/server";
-export { auth as middleware } from "@/auth";
+import { auth as middleware } from "@/auth";
 
-const protectedRoutes = ["/dashboard", "/settings"]; // Define your protected routes
+const protectedRoutes = ["/dashboard", "/settings"];
 
-export default function middleware(req: NextRequest) {
+
+export default middleware(async (req) => {
   const { pathname } = req.nextUrl;
   console.log("Middleware running for path:", pathname);
-  // Example: Check for authentication status
-  const isAuthenticated = req.cookies.get("auth_token"); // Replace with your actual authentication logic
+  console.log(req.auth)
 
-  if (!isAuthenticated && protectedRoutes.includes(pathname)) {
+  const user = req.auth?.user;
+
+  if (!user && protectedRoutes.includes(pathname)) {
     const loginUrl = new URL("/login", req.url); // Redirect to login page
     return NextResponse.redirect(loginUrl);
   }
 
+  if (req.nextUrl.pathname === "/login" && user) {
+    return NextResponse.redirect(new URL("/", req.url)); // Redirect to home or another appropriate page
+  }
+
   return NextResponse.next(); // Allow access to the route
-}
+})
 
 // Optionally, define a matcher to specify which routes the middleware should apply to
 export const config = {

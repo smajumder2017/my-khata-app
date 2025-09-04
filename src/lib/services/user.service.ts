@@ -6,7 +6,7 @@ export class UserService {
   constructor() {}
 
   async findByEmail(email: string) {
-    return this.userRepository.findUnique({ where: { email } });
+    return this.userRepository.findUnique({ where: { email }, include: {businesses: {include: {business: true}}, role: true} });
   }
 
   async createUser(data: { email: string; password: string; roleId: string }) {

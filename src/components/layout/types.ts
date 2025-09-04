@@ -1,14 +1,13 @@
 import { LinkProps } from "next/link";
 
-interface User {
+export interface NavUser {
   name: string;
   email: string;
   avatar: string;
 }
 
-interface Team {
+export interface NavBusiness {
   name: string;
-  logo: React.ElementType;
   plan: string;
 }
 
@@ -36,8 +35,8 @@ interface NavGroup {
 }
 
 interface SidebarData {
-  user: User;
-  teams: Team[];
+  user: NavUser;
+  businesses: NavBusiness[];
   navGroups: NavGroup[];
 }
 

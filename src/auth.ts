@@ -2,6 +2,7 @@ import NextAuth, { DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { AuthService } from "./lib/services";
 import { JWT } from "next-auth/jwt";
+import {Role, BusinessUser} from "@prisma/client";
 
 declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
@@ -10,6 +11,8 @@ declare module "next-auth/jwt" {
     id: string;
     email: string;
     roleId: string;
+    role: Role;
+    businesses: BusinessUser[]
   }
 }
 
@@ -22,6 +25,8 @@ declare module "next-auth" {
     id: string;
     email: string;
     roleId: string;
+    role: Role;
+    businesses: BusinessUser[]
   }
   /**
    * The shape of the account object returned in the OAuth providers' `account` callback,
@@ -37,6 +42,7 @@ declare module "next-auth" {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: "/login",
+    newUser: "/register"
   },
   providers: [
     Credentials({
@@ -66,6 +72,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.id = user.id;
         token.email = user.email;
         token.roleId = user.roleId;
+        token.role = user.role;
+        token.businesses = user.businesses
       }
       return token;
     },
@@ -77,6 +85,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: token.id,
           email: token.email,
           roleId: token.roleId,
+          role: token.role,
+          businesses: token.businesses
         },
       };
     },

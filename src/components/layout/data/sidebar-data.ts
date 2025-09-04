@@ -21,31 +21,11 @@ import {
 } from "@tabler/icons-react";
 import { AudioWaveform, Command, GalleryVerticalEnd } from "lucide-react";
 
-import { type SidebarData } from "../types";
+import { type SidebarData, NavUser, NavBusiness } from "../types";
 
-export const sidebarData: SidebarData = {
-  user: {
-    name: "satnaing",
-    email: "satnaingdev@gmail.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
-    {
-      name: "Shadcn Admin",
-      logo: Command,
-      plan: "Vite + ShadcnUI",
-    },
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-  ],
+export const getSidebarData = (user: NavUser, businesses: NavBusiness[]): SidebarData => ({
+  user,
+  businesses,
   // navGroups: [ ...original groups... ],
   navGroups: [
     {
@@ -129,4 +109,4 @@ export const sidebarData: SidebarData = {
     },
     // ...other navGroups commented out...
   ],
-};
+});
