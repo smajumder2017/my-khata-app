@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Business {
+  id         String         @id @default(uuid())
+  name       String
+  createdAt  DateTime       @default(now())
+  users      BusinessUser[]
+  khatas     Khata[]
+  vendors    Vendor[]
+  categories Category[]
+}
+
+model User {
+  id         String         @id @default(uuid())
+  email      String         @unique
+  password   String
+  createdAt  DateTime       @default(now())
+  businesses BusinessUser[]
+  role       Role           @relation(fields: [roleId], references: [id])
+  roleId     String
+}
+
+model BusinessUser {
+  id         String   @id @default(uuid())
+  business   Business @relation(fields: [businessId], references: [id])
+  businessId String
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  joinedAt   DateTime @default(now())
+}
+
+model Role {
+  id    String @id @default(uuid())
+  name  String @unique
+  users User[]
+}
+
+model Khata {
+  id           String        @id @default(uuid())
+  name         String
+  business     Business      @relation(fields: [businessId], references: [id])
+  businessId   String
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+}
+
+model Transaction {
+  id              String   @id @default(uuid())
+  khata           Khata    @relation(fields: [khataId], references: [id])
+  khataId         String
+  transactionDate DateTime
+  vendor          Vendor   @relation(fields: [vendorId], references: [id])
+  vendorId        String
+  category        Category @relation(fields: [categoryId], references: [id])
+  categoryId      String
+  transactionType String
+  isPaid          Boolean  @default(false)
+  createdAt       DateTime @default(now())
+}
+
+model Vendor {
+  id           String        @id @default(uuid())
+  name         String
+  business     Business      @relation(fields: [businessId], references: [id])
+  businessId   String
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
+}
+
+model Category {
+  id           String        @id @default(uuid())
+  name         String
+  business     Business      @relation(fields: [businessId], references: [id])
+  businessId   String
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
+}
